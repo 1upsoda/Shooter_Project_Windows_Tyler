@@ -42,57 +42,57 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="bgLayer1.png">
+    <Compile Include="Images\bgLayer1.png">
       <Name>bgLayer1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="bgLayer2.png">
+    <Compile Include="Images\bgLayer2.png">
       <Name>bgLayer2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="endMenu.png">
+    <Compile Include="Images\endMenu.png">
       <Name>endMenu</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="explosion.png">
+    <Compile Include="Images\explosion.png">
       <Name>explosion</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="laser.png">
+    <Compile Include="Images\laser.png">
       <Name>laser</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="mainbackground.png">
+    <Compile Include="Images\mainbackground.png">
       <Name>mainbackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="mainMenu.png">
+    <Compile Include="Images\mainMenu.png">
       <Name>mainMenu</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="mine.png">
+    <Compile Include="Images\mine.png">
       <Name>mine</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="mineAnimation.png">
+    <Compile Include="Images\mineAnimation.png">
       <Name>mineAnimation</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="player.png">
+    <Compile Include="Images\player.png">
       <Name>player</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="shipAnimation.png">
+    <Compile Include="Images\shipAnimation.png">
       <Name>shipAnimation</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -119,7 +119,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gameFont.spritefont">
+    <Compile Include="Fonts\gameFont.spritefont">
       <Name>gameFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>

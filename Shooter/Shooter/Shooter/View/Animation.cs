@@ -5,10 +5,12 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Shooter.Controller;
+using Shooter.Model;
 
 namespace Shooter.View
 {
-    class Animation
+    public class Animation
     {
         // The image representing the collection of images used for animation
         Texture2D spriteStrip;

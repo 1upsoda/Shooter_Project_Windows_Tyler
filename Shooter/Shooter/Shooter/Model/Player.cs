@@ -6,13 +6,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Shooter.View;
-namespace Shooter.Controller
+
+namespace Shooter.Model
 {
-    class Player
+    public class Player
     {
-        public Animation PlayerAnimation;
+        private Animation playerAnimation;
+        public Animation PlayerAnimation
+        {
+            get { return playerAnimation; }
+            set { playerAnimation = value; }
+        }
         public Vector2 Position;
-        public bool Active;
+        private bool active;
+        public bool Active
+        {
+            get { return active; }
+            set { active = value; }
+        }
         public int Health;
         public int Width
         {
