@@ -21,6 +21,8 @@ namespace Shooter.Model
 
         // Represents the viewable boundary of the game
         Viewport viewport;
+        public float dropMove;
+        public bool sinUp;
 
         // Get the width of the projectile ship
         public int Width
@@ -45,6 +47,10 @@ namespace Shooter.Model
             Position = position;
             this.viewport = viewport;
 
+            dropMove = 0.0f;
+
+            sinUp = true;
+
             Active = true;
 
             Damage = 2;
@@ -56,6 +62,52 @@ namespace Shooter.Model
         {
             // Projectiles always move to the right
             Position.X += projectileMoveSpeed;
+            if (Shooter.Controller.ShooterGame.currentStyle == "Drop")
+            {
+                 if(dropMove > -5.0f && dropMove < 5.0f && sinUp)
+                 {
+                     Position.Y += (Position.Y * 0.1f);
+                 }
+                 if (dropMove >= 5.0f )
+                 {
+                     Position.Y += (Position.Y * -0.1f);
+                     sinUp = false;
+                 }
+                 if (dropMove > -5.0f && dropMove < 5.0f && !sinUp)
+                 {
+                     Position.Y += (Position.Y * 0.1f);
+                 }
+                 if (dropMove <= -5.0f)
+                 {
+                     Position.Y += (Position.Y * -0.1f);
+                     sinUp = true;
+                 }
+            }
+            if (ShooterGame.currentStyle == "Sin-ish")
+            {
+                if (dropMove > -10.0f && dropMove < 10.0f && sinUp)
+                {
+                    dropMove = (dropMove + 1f);
+                    Position.Y += (dropMove);
+                }
+                if (dropMove >= 10.0f)
+                {
+                    dropMove = (dropMove - 1f);
+                    Position.Y += (dropMove);
+                    sinUp = false;
+                }
+                if (dropMove > -10.0f && dropMove < 10.0f && !sinUp)
+                {
+                    dropMove = (dropMove - 1f);
+                    Position.Y += (dropMove);
+                }
+                if (dropMove <= -10.0f)
+                {
+                    dropMove = (dropMove + 1f);
+                    Position.Y += (dropMove);
+                    sinUp = true;
+                }
+            }
             /// projectileSkew = Shooter.Controller.ShooterGame.PlayerMoveSpeedY;
             /// Position.Y = (Position.Y + projectileSkew);
             // Deactivate the bullet if it goes out of screen

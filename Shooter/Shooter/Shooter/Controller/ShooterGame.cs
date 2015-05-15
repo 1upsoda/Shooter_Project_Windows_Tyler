@@ -39,6 +39,8 @@ namespace Shooter.Controller
         }
         float maxX;
         float maxY;
+        int positionIncrease;
+        string sodaProgress;
         // Image used to display the static background
         Texture2D mainBackground;
 
@@ -73,8 +75,16 @@ namespace Shooter.Controller
         Song gameplayMusic;
         //Number that holds the player score
         int score;
+        Random randomSpawnTime = new Random();
         // The font used to display UI elements
         SpriteFont font;
+        public string currentWeapon;
+        public static string currentStyle;
+        public static string CurrentStyle
+        {
+            get { return currentStyle; }
+            set { currentStyle = value; }
+        }
 
         public ShooterGame()
         {
@@ -95,13 +105,14 @@ namespace Shooter.Controller
             // Set a constant player move speed
             playerMoveSpeedX = 0.0f;
             playerMoveSpeedY = 0.0f;
+            positionIncrease = 0;
             maxX = 10.0f;
             maxY = 10.0f;
             bgLayer1 = new ParallaxingBackground();
             bgLayer2 = new ParallaxingBackground();
             // Initialize the enemies list
             enemies = new List<Enemy>();
-
+            sodaProgress = "";
             // Set the time keepers to zero
             previousSpawnTime = TimeSpan.Zero;
 
@@ -111,9 +122,10 @@ namespace Shooter.Controller
             // Initialize our random number generator
             random = new Random();
             projectiles = new List<Projectile>();
-
+            currentWeapon = "Regular";
+            currentStyle = "Regular";
             // Set the laser to fire every quarter second
-            fireTime = TimeSpan.FromSeconds(.25f);
+            fireTime = TimeSpan.FromSeconds(0.25f);
             explosions = new List<Animation>();
             //Set player's score to zero
             score = 0;
@@ -221,6 +233,7 @@ namespace Shooter.Controller
             {
                 previousSpawnTime = gameTime.TotalGameTime;
 
+                enemySpawnTime = TimeSpan.FromSeconds(randomSpawnTime.Next(1, 3));
                 // Add an Enemy
                 AddEnemy();
             }
@@ -289,7 +302,58 @@ namespace Shooter.Controller
             UpdateCollision();
             UpdateProjectiles();
             UpdateExplosions(gameTime);
+            UpdateCheats();
             base.Update(gameTime);
+        }
+        private void UpdateCheats()
+        {
+            if ((currentKeyboardState.IsKeyDown(Keys.D1) || currentKeyboardState.IsKeyDown(Keys.NumPad1)) && sodaProgress != "1upsoda")
+            {
+                sodaProgress = "1";
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.U) && sodaProgress == "1")
+            {
+                sodaProgress = "1u";
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.P) && sodaProgress == "1u")
+            {
+                sodaProgress = "1up";
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.S) && sodaProgress == "1up")
+            {
+                sodaProgress = "1ups";
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.O) && sodaProgress == "1ups")
+            {
+                sodaProgress = "1upso";
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.D) && sodaProgress == "1upso")
+            {
+                sodaProgress = "1upsod";
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.A) && sodaProgress == "1upsod")
+            {
+                sodaProgress = "1upsoda";
+                currentWeapon = "OP LAZER";
+                fireTime = TimeSpan.FromSeconds(0.00001f);
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.L))
+            {
+                currentWeapon = "Lazer";
+                sodaProgress = "";
+                fireTime = TimeSpan.FromSeconds(0.00001f);
+            }
+            if(currentKeyboardState.IsKeyDown(Keys.Enter))
+            {
+                for(int i=0; i<50; i++)
+                {
+                    AddEnemy();
+                }
+            }
+            if(currentKeyboardState.IsKeyDown(Keys.C))
+            {
+                currentStyle = "Drop";
+            }
         }
         private void UpdateProjectiles()
         {
@@ -307,6 +371,7 @@ namespace Shooter.Controller
         private void UpdatePlayer(GameTime gameTime)
         {
             player.Update(gameTime);
+            
             // Get Thumbstick Controls
             player.Position.X += currentGamePadState.ThumbSticks.Left.X * playerMoveSpeedX;
             player.Position.Y -= currentGamePadState.ThumbSticks.Left.Y * playerMoveSpeedY;
@@ -316,11 +381,392 @@ namespace Shooter.Controller
             {
                 // Reset our current time
                 previousFireTime = gameTime.TotalGameTime;
-
-                // Add the projectile, but add it to the front and center of the player
-                AddProjectile(player.Position + new Vector2(player.Width / 2, 0));
-                // Play the laser sound
-                laserSound.Play();
+                if (currentWeapon == "OP LAZER")
+                {
+                    // Add the projectile, but add it to the front and center of the player
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - 42));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - 84));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - 126));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - 168));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - 210));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - 210));
+                    positionIncrease = 252;
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - positionIncrease));
+                    positionIncrease = 294;
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - positionIncrease));
+                    positionIncrease = 336;
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - positionIncrease));
+                    positionIncrease = 378;
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 2 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 5 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 8 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 10 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 12 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 15 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 18 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 20 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 22 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 25 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 28 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 30 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 32 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 35 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 38 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 40 + positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - positionIncrease));
+                    positionIncrease = 420;
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -0 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -2 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -5 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -8 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -10 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -12 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -15 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -18 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -20 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -22 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -25 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -28 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -30 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -32 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -35 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -38 - positionIncrease));
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, -40 - positionIncrease));
+                    // Play the laser sound
+                    laserSound.Play();
+                    laserSound.Play();
+                    laserSound.Play();
+                    laserSound.Play();
+                    laserSound.Play();
+                    laserSound.Play();
+                    laserSound.Play();
+                    laserSound.Play();
+                    laserSound.Play();
+                }
+                else if (currentWeapon == "Regular")
+                {
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0));
+                    laserSound.Play();
+                }
+                else if (currentWeapon == "Lazer")
+                {
+                    AddProjectile(player.Position + new Vector2(player.Width / 2, 0));
+                    laserSound.Play();
+                }
             }
 
             // Use the Keyboard / Dpad
@@ -463,14 +909,19 @@ namespace Shooter.Controller
             {
                 explosions[i].Draw(spriteBatch);
                 // Draw the score
-                spriteBatch.DrawString(font, "score: " + score, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
-                // Draw the player health
-                spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
-            }
+            }            
+
             spriteBatch.DrawString(font, "score: " + score, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
             // Draw the player health
             spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
+            spriteBatch.DrawString(font, "weapon: " + currentWeapon, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 60), Color.White);
+            spriteBatch.DrawString(font, "style: " + currentStyle, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 90), Color.White);
 
+            if (player.Health < 30)
+            {
+                spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.Red);
+
+            }
             spriteBatch.End();
             
             base.Draw(gameTime);
@@ -531,8 +982,15 @@ namespace Shooter.Controller
                     // Determine if the two objects collided with each other
                     if (rectangle1.Intersects(rectangle2))
                     {
-                        enemies[j].Health -= projectiles[i].Damage;
-                        projectiles[i].Active = false;
+                        if (currentWeapon == "OP LAZER")
+                        {
+                            enemies[j].Health -= (projectiles[i].Damage * 8000);
+                        }
+                        else
+                        {
+                            enemies[j].Health -= (projectiles[i].Damage);
+                            projectiles[i].Active = false;
+                        }
                     }
                 }
             }
