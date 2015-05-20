@@ -37,8 +37,13 @@ namespace Shooter.Model
         }
 
         // Determines how fast the projectile moves
-        float projectileMoveSpeed;
+        float projectileHorzSpeed;
+        float projectileVertSpeed;
         float projectileSkew;
+
+        int sinTick;
+       public static double newXpos;
+       public static float newYpos;
 
 
         public void Initialize(Viewport viewport, Texture2D texture, Vector2 position)
@@ -55,13 +60,18 @@ namespace Shooter.Model
 
             Damage = 2;
 
-            projectileMoveSpeed = 20f;
+            projectileHorzSpeed = 20f;
+            projectileVertSpeed = 0f;
+
+            sinTick = 0;
             projectileSkew = 0.0f;
         }
         public void Update()
         {
             // Projectiles always move to the right
-            Position.X += projectileMoveSpeed;
+            sinTick++;
+            Position.X += projectileHorzSpeed;
+            Position.Y += projectileVertSpeed;
             if (Shooter.Controller.ShooterGame.currentStyle == "Drop")
             {
                  if(dropMove > -5.0f && dropMove < 5.0f && sinUp)
@@ -107,6 +117,14 @@ namespace Shooter.Model
                     Position.Y += (dropMove);
                     sinUp = true;
                 }
+            }
+            if (ShooterGame.currentStyle == "Sin Wave")
+            {
+                //newXpos = (double) Position.X;
+                //newYpos = (float) Math.Sin(newXpos) * 50;
+                //projectileHorzSpeed = 5.0f;
+                //Position.Y += newYpos;
+                projectileVertSpeed = Math.Sin(
             }
             /// projectileSkew = Shooter.Controller.ShooterGame.PlayerMoveSpeedY;
             /// Position.Y = (Position.Y + projectileSkew);

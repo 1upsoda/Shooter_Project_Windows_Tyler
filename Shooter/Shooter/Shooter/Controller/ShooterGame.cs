@@ -354,6 +354,10 @@ namespace Shooter.Controller
             {
                 currentStyle = "Drop";
             }
+            if (currentKeyboardState.IsKeyDown(Keys.Z))
+            {
+                currentStyle = "Sin Wave";
+            }
         }
         private void UpdateProjectiles()
         {
@@ -922,6 +926,9 @@ namespace Shooter.Controller
                 spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.Red);
 
             }
+            spriteBatch.DrawString(font, "X: " + Projectile.newXpos, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 120), Color.White);
+            spriteBatch.DrawString(font, "Y: " + Projectile.newYpos, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 150), Color.White);
+
             spriteBatch.End();
             
             base.Draw(gameTime);
